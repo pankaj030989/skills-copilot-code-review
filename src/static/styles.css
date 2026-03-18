@@ -30,6 +30,11 @@
   --error-light: #ffebee;
   --info: #0c5460;
   --info-light: #d1ecf1;
+
+  /* Banner colors */
+  --announcement-bg: #1a237e;
+  --announcement-bg-alt: #000051;
+  --announcement-text: #ffffff;
 }
 
 * {
@@ -663,4 +668,22 @@ footer {
 
 #logout-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.announcement-banner {
+  background: linear-gradient(135deg, var(--announcement-bg-alt), var(--announcement-bg));
+  color: var(--announcement-text);
+  text-align: center;
+  padding: 15px;
+  border-bottom: 3px solid var(--secondary);
+  font-weight: bold;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 767px) {
+  .announcement-banner {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
 }
