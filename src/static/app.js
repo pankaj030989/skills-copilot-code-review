@@ -464,10 +464,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const queryString =
         queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
       const response = await fetch(`/activities${queryString}`);
-      const activities = await response.json();
+      const data = await response.json();
+
+      if (!response.ok) {
+        const detail =
+          (data && (data.detail || data.message)) ||
+          `Request failed with status ${response.status}`;
+        throw new Error(detail);
+      }
 
       // Save the activities data
-      allActivities = activities;
+      allActivities = data;
 
       // Apply search and filter, and handle weekend filter in client
       displayFilteredActivities();
