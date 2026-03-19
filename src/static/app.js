@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const activitiesList = document.getElementById("activities-list");
   const messageDiv = document.getElementById("message");
   const announcementList = document.getElementById("announcement-list");
+  const announcementBanner = document.getElementById("announcement-banner");
   const registrationModal = document.getElementById("registration-modal");
   const modalActivityName = document.getElementById("modal-activity-name");
   const signupForm = document.getElementById("signup-form");
@@ -651,6 +652,71 @@ document.addEventListener("DOMContentLoaded", () => {
       announcementsModal.classList.add("hidden");
       resetAnnouncementForm();
     }, 300);
+  function setAnnouncementBanner(message, tone = "info") {
+    announcementBanner.textContent = message;
+
+    // Preserve existing classes and only toggle the tone modifier class
+    const toneClasses = [
+      "announcement-banner-info",
+      "announcement-banner-success",
+      "announcement-banner-warning",
+      "announcement-banner-error",
+    ];
+
+    announcementBanner.classList.remove(...toneClasses);
+    announcementBanner.classList.add("announcement-banner");
+    announcementBanner.classList.add(`announcement-banner-${tone}`);
+  }
+
+  function updateAnnouncementBanner(activities) {
+    const activityEntries = Object.values(activities);
+
+    if (activityEntries.length === 0) {
+      setAnnouncementBanner(
+        "No activities match the current filters. Adjust the filters to see available registration options.",
+        "info"
+      );
+      return;
+    }
+
+    const summary = activityEntries.reduce(
+      (totals, details) => {
+        const spotsLeft = details.max_participants - details.participants.length;
+
+        if (spotsLeft > 0) {
+          totals.openActivities += 1;
+          totals.spotsLeft += spotsLeft;
+        } else {
+          totals.fullActivities += 1;
+        }
+
+        return totals;
+      },
+      { openActivities: 0, fullActivities: 0, spotsLeft: 0 }
+    );
+
+    if (summary.openActivities === 0) {
+      setAnnouncementBanner(
+        "All displayed activities are currently full. Try another filter or check back after roster changes.",
+        "warning"
+      );
+      return;
+    }
+
+    const activityLabel =
+      summary.openActivities === 1 ? "activity has" : "activities have";
+    const spotLabel = summary.spotsLeft === 1 ? "spot" : "spots";
+    const fullNotice =
+      summary.fullActivities > 0
+        ? ` ${summary.fullActivities} full ${
+            summary.fullActivities === 1 ? "activity is" : "activities are"
+          } already full and not included in the available spots total.`
+        : "";
+
+    setAnnouncementBanner(
+      `${summary.openActivities} displayed ${activityLabel} space available, with ${summary.spotsLeft} ${spotLabel} left in total.${fullNotice}`,
+      "success"
+    );
   }
 
   // Format schedule for display - handles both old and new format
@@ -742,6 +808,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchActivities() {
     // Show loading skeletons first
     showLoadingSkeletons();
+    setAnnouncementBanner("Checking current registration availability...", "info");
 
     try {
       // Build query string with filters if they exist
@@ -770,16 +837,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const queryString =
         queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
       const response = await fetch(`/activities${queryString}`);
-      const activities = await response.json();
+      const data = await response.json();
+
+      if (!response.ok) {
+        const detail =
+          (data && (data.detail || data.message)) ||
+          `Request failed with status ${response.status}`;
+        throw new Error(detail);
+      }
 
       // Save the activities data
-      allActivities = activities;
+      allActivities = data;
 
       // Apply search and filter, and handle weekend filter in client
       displayFilteredActivities();
     } catch (error) {
       activitiesList.innerHTML =
         "<p>Failed to load activities. Please try again later.</p>";
+      setAnnouncementBanner(
+        "Registration availability could not be loaded right now. Please try again later.",
+        "error"
+      );
       console.error("Error fetching activities:", error);
     }
   }
@@ -829,6 +907,8 @@ document.addEventListener("DOMContentLoaded", () => {
       // Activity passed all filters, add to filtered list
       filteredActivities[name] = details;
     });
+
+    updateAnnouncementBanner(filteredActivities);
 
     // Check if there are any results
     if (Object.keys(filteredActivities).length === 0) {
