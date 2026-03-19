@@ -337,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       summary.fullActivities > 0
         ? ` ${summary.fullActivities} full ${
             summary.fullActivities === 1 ? "activity is" : "activities are"
-          } hidden in the remaining count.`
+          } already full and not included in the available spots total.`
         : "";
 
     setAnnouncementBanner(
