@@ -281,7 +281,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setAnnouncementBanner(message, tone = "info") {
     announcementBanner.textContent = message;
-    announcementBanner.className = `announcement-banner announcement-banner-${tone}`;
+
+    // Preserve existing classes and only toggle the tone modifier class
+    const toneClasses = [
+      "announcement-banner-info",
+      "announcement-banner-success",
+      "announcement-banner-warning",
+      "announcement-banner-error",
+    ];
+
+    announcementBanner.classList.remove(...toneClasses);
+    announcementBanner.classList.add("announcement-banner");
+    announcementBanner.classList.add(`announcement-banner-${tone}`);
   }
 
   function updateAnnouncementBanner(activities) {
