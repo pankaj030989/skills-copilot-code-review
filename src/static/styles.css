@@ -664,3 +664,31 @@ footer {
 #logout-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
+
+.announcement-banner {
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 12px;
+}
+
+.announcement-banner-info {
+  background-color: var(--info-light);
+  color: var(--info);
+}
+
+.announcement-banner-success {
+  background-color: var(--success-light);
+  color: var(--success);
+}
+
+.announcement-banner-warning {
+  background-color: var(--warning-light);
+  color: #8a5300;
+}
+
+.announcement-banner-error {
+  background-color: var(--error-light);
+  color: var(--error);
+}
