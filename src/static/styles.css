@@ -26,6 +26,7 @@
   --success-light: #e8f5e9;
   --warning: #ff9800;
   --warning-light: #fff3cd;
+  --warning-text: #8a5300;
   --error: #c62828;
   --error-light: #ffebee;
   --info: #0c5460;
@@ -685,7 +686,7 @@ footer {
 
 .announcement-banner-warning {
   background-color: var(--warning-light);
-  color: #8a5300;
+  color: var(--warning-text);
 }
 
 .announcement-banner-error {
