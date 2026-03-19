@@ -23,11 +23,25 @@
           </button>
           <div id="user-info" class="hidden">
             <span id="display-name"></span>
+            <button id="manage-announcements-button" class="header-action-button">
+              Manage Announcements
+            </button>
             <button id="logout-button">Logout</button>
           </div>
         </div>
       </div>
     </header>
+
+    <section
+      id="announcement-section"
+      class="announcement-section"
+      aria-label="School announcements"
+      aria-live="polite"
+    >
+      <div id="announcement-list" class="announcement-list">
+        <div class="announcement-empty">Loading announcements...</div>
+      </div>
+    </section>
 
     <main>
       <section id="activities-container">
@@ -131,6 +145,59 @@
           <button type="submit">Login</button>
         </form>
         <div id="login-message" class="hidden message"></div>
+      </div>
+    </div>
+
+    <!-- Announcements Management Modal -->
+    <div id="announcements-modal" class="modal hidden">
+      <div class="modal-content announcements-modal-content">
+        <span class="close-announcements-modal">&times;</span>
+        <h3>Manage Announcements</h3>
+        <p class="announcements-helper-text">
+          Create, edit, and remove announcements. Expiration date is required.
+        </p>
+
+        <div class="announcements-admin-layout">
+          <div class="announcements-panel">
+            <h4>Existing Announcements</h4>
+            <div id="announcements-admin-list" class="announcements-admin-list"></div>
+          </div>
+
+          <div class="announcements-panel">
+            <h4 id="announcement-form-title">Add Announcement</h4>
+            <form id="announcement-form" class="announcement-form">
+              <input type="hidden" id="announcement-id" />
+
+              <div class="form-group">
+                <label for="announcement-message">Message:</label>
+                <textarea
+                  id="announcement-message"
+                  rows="4"
+                  maxlength="500"
+                  required
+                  placeholder="Share updates with students and families"
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="announcement-start-date">Start Date (optional):</label>
+                <input type="datetime-local" id="announcement-start-date" />
+              </div>
+
+              <div class="form-group">
+                <label for="announcement-expires-at">Expiration Date:</label>
+                <input type="datetime-local" id="announcement-expires-at" required />
+              </div>
+
+              <div class="announcement-form-actions">
+                <button type="submit" id="save-announcement-button">Save Announcement</button>
+                <button type="button" id="cancel-announcement-edit" class="secondary-action hidden">
+                  Cancel Edit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 
