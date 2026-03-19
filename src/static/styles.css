@@ -26,6 +26,7 @@
   --success-light: #e8f5e9;
   --warning: #ff9800;
   --warning-light: #fff3cd;
+  --warning-text: #8a5300;
   --error: #c62828;
   --error-light: #ffebee;
   --info: #0c5460;
@@ -663,4 +664,32 @@ footer {
 
 #logout-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
+}
+
+.announcement-banner {
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+  border-radius: 5px;
+  margin-bottom: 12px;
+}
+
+.announcement-banner-info {
+  background-color: var(--info-light);
+  color: var(--info);
+}
+
+.announcement-banner-success {
+  background-color: var(--success-light);
+  color: var(--success);
+}
+
+.announcement-banner-warning {
+  background-color: var(--warning-light);
+  color: var(--warning-text);
+}
+
+.announcement-banner-error {
+  background-color: var(--error-light);
+  color: var(--error);
 }
